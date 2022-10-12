@@ -4,10 +4,10 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 body {
-  font-family: Verdana, sans-serif;
+  font-family: lato, sans-serif;
   margin: auto;
   padding: 20px;
-  max-width: 65ch;
+  max-width: 75ch;
   text-align: left;
   background-color: rgb(252, 252, 252);
   word-wrap: break-word;
@@ -59,9 +59,8 @@ pre > code {
   all: unset;
 }
 blockquote {
-  border-left: 8px solid rgba(240, 128, 128, 0.837);
-  background-color: rgb(255, 240, 240);
+  border: 1px solid rgba(0, 0, 0, 0.837);
   color: #222;
-  padding-left: 20px;
   margin: 0px;
+  padding: 10px;
 }

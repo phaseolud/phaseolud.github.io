@@ -1,14 +1,33 @@
 ---
 title: "Faster Calculations for Nuclear Fusion with Machine Learning"
 description: "In this blog post we discuss what tomographic inversions are, and in what fields we might find them. Solving inverse problems is difficult, so we work through examples, and use an interactive tool to visualize the inversion problem."
-publishDate: "Oct 19 2022"
+pubDate: "19 Oct 2022"
 layout: "../../layouts/BlogPost.astro"
 draft: true
 ---
-The formula for a line is given by $ y = ax $, where $ a $ is the slope and $b$ the offset
-$\sqrt{a^2 + b^2}$
-$$ \int f(x) $$
-$ \int f(x) $
+import InfoBlock from "../../components/InfoBlock.astro";
+
+The temperature in the core of a nuclear fusion reactor is very hot, around 150 milion degrees celsius! In the process of burning the fuel, we do not only generate heat, but also ashes. Ideally, these ashes are removed because they dilute the fuel in the reactor. However, we need to be careful, because if we allow to much heat and ashes to flow to the wall, the wall might melt. In other words: we need to control the heat in the reactor.
+
+But for good control we also need measurements. For example, a self-driving car will never be able to self drive if it can't sense the environment. The car needs cameras to know what is happening in the outside world. In the same way, wee have cameras looking inside the reactor to know what is happening. The problem however is that these cameras do not exactly measure what we want to know: they are measuring a _projection_. This is illustrated in the following figure:
+
+TODO: add figure with projections.
+
+
+## Understanding Projections in a Fusion Reactor
+
+
+In our case of a nuclear fusion reactor, we have a cross-section that 'turns around' as can be seen in the examples below.
+TODO: add mantis example.
+On the left we can see an image that would represent what it would look like in a fusion reactor, and on the right we can see an synthetically generated image. To even get more insight into how the camera images are created from the cross-sections, the following interactive example allows you to draw an emissivity profile in the cross-section, and the camera image is automatically calculated from that. I encourage to play around with how the location of the emissivity influences the camera image.
+
+TODO: Interactive example with drawing the poloidal emissivity
+
+The problem is that finding the original image back from the projection is difficult and computationally intensive. In this blog post we will find out why this is difficult and slow, and gain insight into how these projections exactly work.
+
+## Solving Forward and Inverse Problems
+TODO: show here that inverse is difficult, but that we humans can learn just as neural networks
+
 > this is a block quote
 > with two rules?
 > with mathematics? 
@@ -19,3 +38,15 @@ $ \int f(x) $
 > \int_a^b f(x),
 > $$
 > which results in
+<InfoBlock>
+Test info block
+with latex
+$ y = ax $
+$$
+Y = AX
+$$
+</InfoBlock>
+
+## Neural Network based Calculations
+TODO: show the difference in speed
+TODO: show the difference in accuracy?
