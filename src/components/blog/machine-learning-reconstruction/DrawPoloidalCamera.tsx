@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import InterActiveCanvas from "./InteractiveCanvas";
 import CameraImageCanvas from "./CameraImageCanvas";
-import { create, all } from "mathjs";
+import { create, all, Matrix } from "mathjs";
 const math = create(all);
 
-async function loadGeometryMatrix() {
+async function loadGeometryMatrix(): Promise<Matrix> {
   const response = await fetch(
     "/blogdata/machine-learning-reconstruction/mathjs_gm.json"
   );

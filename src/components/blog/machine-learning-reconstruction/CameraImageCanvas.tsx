@@ -37,7 +37,7 @@ const CameraImageCanvas = ({ flatCameraImage: flatCameraImage }: Props) => {
   }, [flatCameraImage]);
   return (
     <>
-      <canvas ref={canvasRef}></canvas>
+      <canvas ref={canvasRef} className={'transform -scale-x-100'}></canvas>
     </>
   );
 };
