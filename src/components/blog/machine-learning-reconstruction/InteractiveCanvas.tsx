@@ -9,10 +9,10 @@ import React, {
 const scaleFactor = 1 / 6;
 
 type Props = {
-  updateParent: Function
-}
+  updateParent: Function;
+};
 
-const InterActiveCanvas = forwardRef((props : Props, ref) => {
+const InterActiveCanvas = forwardRef((props: Props, ref) => {
   const [drawing, setDrawing] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D>(null);
@@ -29,7 +29,12 @@ const InterActiveCanvas = forwardRef((props : Props, ref) => {
   }));
 
   const startDraw = ({ nativeEvent }) => {
-    const { offsetX, offsetY } = nativeEvent;
+    let { offsetX, offsetY } = nativeEvent;
+    if (offsetX === undefined) {
+      const rect = nativeEvent.target.getBoundingClientRect();
+      offsetX = nativeEvent.targetTouches[0].clientX - rect.left;
+      offsetY = nativeEvent.targetTouches[0].clientY - rect.top;
+    }
     ctxRef.current.beginPath();
     ctxRef.current.moveTo(offsetX, offsetY);
     setDrawing(true);
@@ -43,7 +48,13 @@ const InterActiveCanvas = forwardRef((props : Props, ref) => {
 
   const draw = ({ nativeEvent }) => {
     if (!drawing) return;
-    const { offsetX, offsetY } = nativeEvent;
+    let { offsetX, offsetY } = nativeEvent;
+    if (offsetX === undefined) {
+      const rect = nativeEvent.target.getBoundingClientRect();
+      offsetX = nativeEvent.targetTouches[0].clientX - rect.left;
+      offsetY = nativeEvent.targetTouches[0].clientY - rect.top;
+    }
+    console.log(offsetY);
     ctxRef.current.lineTo(offsetX, offsetY);
     ctxRef.current.stroke();
   };
@@ -55,7 +66,7 @@ const InterActiveCanvas = forwardRef((props : Props, ref) => {
       (canvasRef.current.width * 1) / scaleFactor,
       (canvasRef.current.height * 1) / scaleFactor
     );
-    props.updateParent()
+    props.updateParent();
   };
 
   useEffect(() => {
@@ -92,11 +103,16 @@ const InterActiveCanvas = forwardRef((props : Props, ref) => {
           </button>
         </div>
         <canvas
+          onTouchStart={startDraw}
+          onTouchMove={draw}
+          onTouchEnd={stopDraw}
+          onTouchCancel={stopDraw}
           onMouseDown={startDraw}
           onMouseUp={stopDraw}
           onMouseMove={draw}
           onMouseLeave={stopDraw}
           ref={canvasRef}
+          style={{ touchAction: "none" }}
         ></canvas>
       </div>
     </>
