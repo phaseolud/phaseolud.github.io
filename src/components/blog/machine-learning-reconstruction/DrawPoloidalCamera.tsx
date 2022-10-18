@@ -67,8 +67,16 @@ const DrawPoloidalCamera = () => {
   };
 
   useEffect(() => {
-    if (geometryMatrix) calculateCameraFromEmissivity();
+    if (geometryMatrix && rectToPolMap) calculateCameraFromEmissivity();
   }, [emissivity]);
+
+  if (!(geometryMatrix || rectToPolMap))
+    return (
+      <div className="flex justify-center items-center font-bold my-16 text-lg">
+        Loading math data
+      </div>
+    );
+
   return (
     <>
       <div>
@@ -83,6 +91,5 @@ const DrawPoloidalCamera = () => {
     </>
   );
 };
-
 
 export default DrawPoloidalCamera;
