@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
 
 const scaleFactor = 1 / 6;
 
@@ -14,17 +8,13 @@ type Props = {
 
 const InterActiveCanvas = forwardRef((props: Props, ref) => {
   const [drawing, setDrawing] = useState(false);
+  const [initializedDrawing, setInitializedDrawing] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D>(null);
 
   useImperativeHandle(ref, () => ({
     testRef() {
-      return ctxRef.current.getImageData(
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
+      return ctxRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
     },
   }));
 
@@ -48,13 +38,16 @@ const InterActiveCanvas = forwardRef((props: Props, ref) => {
 
   const draw = ({ nativeEvent }) => {
     if (!drawing) return;
+    if (!initializedDrawing) {
+      setInitializedDrawing(true);
+      clear();
+    }
     let { offsetX, offsetY } = nativeEvent;
     if (offsetX === undefined) {
       const rect = nativeEvent.target.getBoundingClientRect();
       offsetX = nativeEvent.targetTouches[0].clientX - rect.left;
       offsetY = nativeEvent.targetTouches[0].clientY - rect.top;
     }
-    console.log(offsetY);
     ctxRef.current.lineTo(offsetX, offsetY);
     ctxRef.current.stroke();
   };
@@ -87,6 +80,11 @@ const InterActiveCanvas = forwardRef((props: Props, ref) => {
     ctx.strokeStyle = "#FF8787";
     ctx.lineWidth = 2;
     ctxRef.current = ctx;
+    ctx.font = "80px Serif";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("Draw", width / 2, height / 2);
+    ctx.fillText("Here!", width / 2, height * 0.75);
   }, []);
 
   // Drawing functionalities
@@ -95,10 +93,7 @@ const InterActiveCanvas = forwardRef((props: Props, ref) => {
     <>
       <div className="flex flex-col">
         <div>
-          <button
-            onClick={clear}
-            className="bg-red-300 px-2 py-1 my-2 rounded-md"
-          >
+          <button onClick={clear} className="bg-red-300 px-2 py-1 my-2 rounded-md">
             Clear Canvas
           </button>
         </div>

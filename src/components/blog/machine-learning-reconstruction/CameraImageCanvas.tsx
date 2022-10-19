@@ -1,6 +1,6 @@
 import * as math from "mathjs";
 import React, { useEffect, useRef, useState } from "react";
-
+import tokamakRenderImage from "./masked_rendered_view_highres.png";
 type Props = {
   flatCameraImage;
 };
@@ -18,26 +18,29 @@ const CameraImageCanvas = ({ flatCameraImage: flatCameraImage }: Props) => {
     canvas.height = 258;
     canvas.style.width = `${height * aspectRatio}px`;
     canvas.style.height = `${height}px`;
-    canvas.style.backgroundColor = "black";
+    canvas.style.background =
+      "url('/blogdata/machine-learning-reconstruction/masked_rendered_view_highres.png')";
+    canvas.style.backgroundSize = "100% 100%";
     const ctx = canvas.getContext("2d");
     ctxRef.current = ctx;
   }, []);
 
   useEffect(() => {
     let colourImageData = new Uint8ClampedArray(258 * 193 * 4);
-    const brightnessScaling = 350.0 /  math.max(flatCameraImage)
+    const maxFlatCameraImage = math.max(flatCameraImage);
+    const brightnessScaling = 350.0 / maxFlatCameraImage;
     for (let i = 0; i < colourImageData.length; i += 4) {
-      colourImageData[i + 0] = brightnessScaling * flatCameraImage[i / 4];    // R value
-      colourImageData[i + 1] = 0.5 * brightnessScaling * flatCameraImage[i / 4];  // G value
-      colourImageData[i + 2] = 0.5 * brightnessScaling * flatCameraImage[i / 4];    // B value
-      colourImageData[i + 3] = 255;  // A value
+      colourImageData[i + 0] = brightnessScaling * flatCameraImage[i / 4]; // R value
+      colourImageData[i + 1] = 0.5 * brightnessScaling * flatCameraImage[i / 4]; // G value
+      colourImageData[i + 2] = 0.5 * brightnessScaling * flatCameraImage[i / 4]; // B value
+      colourImageData[i + 3] = maxFlatCameraImage > 0 ? 240 : 130; // A value
     }
     let imageData = new ImageData(colourImageData, 193, 258);
     ctxRef.current.putImageData(imageData, 0, 0);
   }, [flatCameraImage]);
   return (
     <>
-      <canvas ref={canvasRef} className={'transform -scale-x-100'}></canvas>
+      <canvas ref={canvasRef} className={"transform -scale-x-100"}></canvas>
     </>
   );
 };
