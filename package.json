@@ -17,6 +17,7 @@
     "@astrojs/tailwind": "^2.1.0",
     "@fontsource/lato": "^4.5.10",
     "astro": "^1.4.4",
+    "astro-icon": "^0.7.3",
     "astro-katex": "^1.0.5",
     "canvas": "^2.10.1",
     "katex": "^0.16.2",
