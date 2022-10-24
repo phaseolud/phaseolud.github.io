@@ -8,12 +8,19 @@ body {
   margin: auto;
   padding: 20px;
   max-width: 75ch;
-  text-align: left;
+  text-align: justify;
+  text-justify: auto;
   background-color: rgb(252, 252, 252);
   word-wrap: break-word;
   overflow-wrap: break-word;
   line-height: 1.5;
   color: #444;
+}
+p {
+  margin: 13px 0;
+}
+h2 {
+  font-size: x-large;
 }
 h1,
 h2,
@@ -23,7 +30,8 @@ h5,
 h6,
 strong,
 b {
-  color: #222;
+  color: #293241;
+  font-weight: bold;
 }
 a {
   color: #3273dc;
@@ -64,3 +72,34 @@ blockquote {
   margin: 0px;
   padding: 10px;
 }
+
+table {
+  table-layout: fixed;
+}
+
+thead tr {
+  background-color: #293241;
+  color: #ffffff;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+  border-bottom: 2px solid #293241;
+}
+
+
+/* color ideas */
+/* CSS HEX */
+/* --bdazzled-blue: #3d5a80ff;
+--dark-sky-blue: #98c1d9ff;
+--light-cyan: #e0fbfcff;
+--burnt-sienna: #ee6c4dff;
+--gunmetal: #293241ff; */

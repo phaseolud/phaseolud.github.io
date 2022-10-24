@@ -29,10 +29,11 @@ const CameraImageCanvas = ({ flatCameraImage: flatCameraImage }: Props) => {
     let colourImageData = new Uint8ClampedArray(258 * 193 * 4);
     const maxFlatCameraImage = math.max(flatCameraImage);
     const brightnessScaling = 350.0 / maxFlatCameraImage;
+    const normalizedColour = [1, 108 / 238, 77 / 238];
     for (let i = 0; i < colourImageData.length; i += 4) {
       colourImageData[i + 0] = brightnessScaling * flatCameraImage[i / 4]; // R value
-      colourImageData[i + 1] = 0.5 * brightnessScaling * flatCameraImage[i / 4]; // G value
-      colourImageData[i + 2] = 0.5 * brightnessScaling * flatCameraImage[i / 4]; // B value
+      colourImageData[i + 1] = normalizedColour[1] * brightnessScaling * flatCameraImage[i / 4]; // G value
+      colourImageData[i + 2] = normalizedColour[2] * brightnessScaling * flatCameraImage[i / 4]; // B value
       colourImageData[i + 3] = maxFlatCameraImage > 0 ? 240 : 130; // A value
     }
     let imageData = new ImageData(colourImageData, 193, 258);

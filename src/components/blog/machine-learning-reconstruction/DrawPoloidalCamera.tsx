@@ -27,6 +27,8 @@ const DrawPoloidalCamera = () => {
   const [rectToPolMap, setRectToPolMap] = useState<Map<number, number>>(null);
   const [flatCameraImage, setFlatCameraImage] = useState<Array<number>>(Array(49794).fill(0));
 
+  const dataLoaded = geometryMatrix && rectToPolMap
+
   useEffect(() => {
     loadGeometryMatrix().then((data) => setGeometryMatrix(data));
     loadRectToPoloidalGridMap().then((data) => setRectToPolMap(data));
@@ -51,10 +53,10 @@ const DrawPoloidalCamera = () => {
   };
 
   useEffect(() => {
-    if (geometryMatrix && rectToPolMap) calculateCameraFromEmissivity();
+    if (dataLoaded) calculateCameraFromEmissivity();
   }, [emissivity]);
 
-  if (!(geometryMatrix || rectToPolMap))
+  if (!dataLoaded)
     return <div className="flex justify-center items-center font-bold my-16 text-lg">Loading math data</div>;
 
   return (

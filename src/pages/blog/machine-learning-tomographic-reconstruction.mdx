@@ -4,41 +4,157 @@ description: "In this blog post we discuss what tomographic inversions are, and 
 pubDate: "19 Oct 2022"
 layout: "../../layouts/BlogPost.astro"
 ---
-import InfoBlock from "../../components/InfoBlock.astro";
 
-The temperature in the core of a nuclear fusion reactor is very hot, around 150 milion degrees celsius! In the process of burning the fuel, we do not only generate heat, but also ashes. Ideally, these ashes are removed because they dilute the fuel in the reactor. However, we need to be careful, because if we allow to much heat and ashes to flow to the wall, the wall might melt. In other words: we need to control the heat in the reactor.
+import InfoBlock from "../../components/InfoBlock.astro";
+import Todo from "../../components/Todo.astro";
+import DrawPoloidalCamera from "../../components/blog/machine-learning-reconstruction/DrawPoloidalCamera.tsx";
+
+The temperature in the core of a nuclear fusion reactor can be very hot, around 150 million degrees celsius! In the process of burning the fuel, we do not only generate heat, but also ashes. Ideally, these ashes are removed because they dilute the fuel in the reactor. However, we need to be careful, because if we allow to much heat and ashes to flow to the wall, the wall might melt. In other words: we need to control the heat in the reactor.
 
 But for good control we also need measurements. For example, a self-driving car will never be able to self drive if it can't sense the environment. The car needs cameras to know what is happening in the outside world. In the same way, wee have cameras looking inside the reactor to know what is happening. The problem however is that these cameras do not exactly measure what we want to know: they are measuring a _projection_. This is illustrated in the following figure:
 
-TODO: add figure with projections.
-
+<Todo>Add figure with projections</Todo>
 
 ## Understanding Projections in a Fusion Reactor
 
-
 In our case of a nuclear fusion reactor, we have a cross-section that 'turns around' as can be seen in the examples below.
-TODO: add mantis example.
-On the left we can see an image that would represent what it would look like in a fusion reactor, and on the right we can see an synthetically generated image. To even get more insight into how the camera images are created from the cross-sections, the following interactive example allows you to draw an emissivity profile in the cross-section, and the camera image is automatically calculated from that. I encourage to play around with how the location of the emissivity influences the camera image.
 
-TODO: Interactive example with drawing the poloidal emissivity
+<Todo>Add mantis example</Todo>
 
-The problem is that finding the original image back from the projection is difficult and computationally intensive. In this blog post we will find out why this is difficult and slow, and gain insight into how these projections exactly work.
-
-## Solving Forward and Inverse Problems
-TODO: show here that inverse is difficult, but that we humans can learn just as neural networks
-<InfoBlock>
-Test info block
-with latex
-$ y = ax $
-$$
-Y = AX
-$$
-</InfoBlock>
-
-## Neural Network based Calculations
-TODO: show the difference in speed
-TODO: show the difference in accuracy?
-
-import DrawPoloidalCamera from '../../components/blog/machine-learning-reconstruction/DrawPoloidalCamera.tsx'
+On the right we can see an image that would represent what it would look like in a fusion reactor, and on the left we can see the corresponding cross-section. To even get more insight into how the camera images are created from the cross-sections, the following interactive example allows you to draw an emissivity profile in the cross-section, and the camera image is automatically calculated from that. I encourage to play around with how the location of the emissivity influences the camera image.
 
 <DrawPoloidalCamera client:load />
+
+As we can see, calculating the camera image is pretty fast given a cross-section. The problem is that finding the cross-section back from the camera image is difficult and slow. In this blog post we will find out why this is difficult and slow, and gain insight how we can speed them up with machine learning.
+
+## From Camera Images in a Reactor to Buying Fruit, and Back
+
+We saw that calculating the camera image from the cross-section was pretty fast, but it was also mentioned that going from a camera image back to a cross-section is pretty slow. To understand this, we will tackle a problem that is much smaller and easier to understand, but the essence is the same.
+
+Let's take the scenario that you are selling fruit and vegetables at the market and that the price of an apple is €0.50, and the price of a banana €1. Two customers arrive, and they order the following:
+
+| Customer | Number of Apples | Number of Bananas |
+| -------- | ---------------- | ----------------- |
+| Xavier   | 2                | 3                 |
+| Yenifer  | 1                | 2                 |
+
+Calculating the total price for both Xavier and Yenifer is pretty straightforward:
+
+| Customer | Cost Apples             | Cost Bananas      | Total Cost |
+| -------- | ----------------------- | ----------------- | ---------- |
+| Xavier   | 2 $\cdot$ €0.50 = €1    | 3 $\cdot$ €1 = €3 | €3         |
+| Yenifer  | 1 $\cdot$ €0.50 = €0.50 | 2 $\cdot$ €1 = €2 | €2.50      |
+
+Okay, bad news! You just found out that there is a new competitor on the market, who is also selling apples and bananas. And you have seen that both your loyal customers Xavier and Yenifer are also going to the new competitor. You would like to know for which price she sells her apples and bananas, but asking is not really possible. However, you can see how much they pay in total. Fortunately, both Xavier and Yenifer **always** buy the same amounts of apples and bananas. So, we will try to calculate the prices of this new competitor from this information. To get started we will the following abbreviations:
+
+| Symbol | Meaning                  |
+| ------ | ------------------------ |
+| $P_a$  | Price of a single apple  |
+| $P_b$  | Price of a single banana |
+
+You just saw that Xavier payed €8 and Yenifer payed €5. Lets fill this in, knowing that Xavier always buys 2 apples and 3 bananas and that Yenifer always buys 1 apple and 2 bananas.
+
+$$
+\begin{align*}
+  2 \cdot P_a + 3 \cdot P_b &= €8 &\text{(Xavier)} \\
+  1 \cdot P_a + 2 \cdot P_b &= €5 &\text{(Yenifer)}
+\end{align*}
+$$
+
+Finding the price of the apples and bananas is a bit difficult. What we can do to get started is taking a look at Yenifer. We can express everything in terms of the price of an apple for her:
+
+$$
+\begin{gather*}
+  1 \cdot P_a + 2 \cdot P_b = €5 &\text{(Yenifer)} \\
+  \implies P_a  =  €5 - 2 \cdot P_b
+\end{gather*}
+$$
+
+Okay, so we know that the price of an apple is the total price for Yenifer (€5) minus 2 times the price of a banana. But now we know the price of an apple in terms of bananas. So, we can plug this into the price calculation of Xavier:
+
+$$
+\begin{align*}
+ 2 \cdot \overbrace{€5 - 2 \cdot P_b}^{P_a \  \text{from Yenifer}} + 3 \cdot P_b &= €8 &\text{(Xavier)} \\
+ = €10 - 4 \cdot P_b + 3 \cdot P_b &= €8
+\end{align*}
+$$
+
+We now have something pretty cool: in the last expression we only have euros and the price of bananas, which means we can calculate the price of a banana!
+
+$$
+\begin{align*}
+  €10 - 4 \cdot P_b + 3 \cdot P_b &= €8 \implies \\
+  -1 \cdot P_b &= - €2 \implies \\
+  P_b &= €2
+\end{align*}
+$$
+
+Now we can use the price of a banana in the total price calculation of Yenifer (or Xavier) to calculate the price of an apple:
+
+$$
+\begin{align*}
+1 \cdot P_a + 2 \cdot \overbrace{€2}^{P_b} &= €5 \implies \\
+1 \cdot P_a + €4 &= €5 \implies \\
+P_a &= €1
+\end{align*}
+$$
+
+Phew, that was some work, but now we know that the prices of our competitor are quite a bit higher than ours with a banana costing €2 and an apple costing €1. We have also seen that if we know to price of a banana and apple, we can pretty easily calculate the total price. However, if we only have the total price, it quite a bit more effort to calculate the price of the fruits. The same holds for our camera images: if we now the cross-section we can easily calculate the camera image, but going from a camera image to a cross-section is much more difficult.
+
+## Machine Learning for Faster Calculations
+
+The next weeks you are again at the market, but now there are even more competitors. Because you can now calculate their prices by knowing their total price, you have written it all down in a table. We use abbreviate total price as TP and competitor as C.:
+
+| Customer | TP C. 1 | TP C. 2 | TP C. 3 | TP C. 4 |
+| -------- | ------- | ------- | ------- | ------- |
+| Xavier   | €8      | €10     | €12     | €14     |
+| Yenifer  | €5      | €6      | €7      | €8      |
+
+Okay, it would be quite some work to find all their sell prices (and those of future competitors), maybe we can find some structure in answers. We ask our neighbour who really likes doing calcuations to work out the prices of the different competitors, but he only has time for competitor 2 and 3 (1 we already did ourselves). We write it again down in a table with Xavier and Yenifer abbreviated as X and Y:
+
+<table>
+  <thead><tr>
+    <th>Fruit</th>
+    <th>C. 1</th>
+    <th>C. 2</th>
+    <th>C. 3</th>
+    <th>C. 4</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Customer</td>
+      <td><table><tr style="border-bottom: 0px;"><td>X</td><td>Y</td></tr></table></td>
+      <td><table><tr style="border-bottom: 0px;"><td>X</td><td>Y</td></tr></table></td>
+      <td><table><tr style="border-bottom: 0px;"><td>X</td><td>Y</td></tr></table></td>
+      <td><table><tr style="border-bottom: 0px;"><td>X</td><td>Y</td></tr></table></td>
+    </tr>
+      <tr style="border-bottom: 1px solid black;">
+      <td>Total Price</td>
+      <td><table><tr style="border-bottom: 0px;"><td>€8</td><td>€5</td></tr></table></td>
+      <td><table><tr style="border-bottom: 0px;"><td>€10</td><td>€6</td></tr></table></td>
+      <td><table><tr style="border-bottom: 0px;"><td>€12</td><td>€7</td></tr></table></td>
+      <td><table><tr style="border-bottom: 0px;"><td>€14</td><td>€8</td></tr></table></td>
+    </tr>
+    <tr>
+      <td>Price Apple</td>
+      <td>€1</td>
+      <td>€2</td>
+      <td>€3</td>
+      <td style="color: #ee6c4dff;">€?</td>
+    </tr>
+        <tr>
+      <td>Price Banana</td>
+      <td>€2</td>
+      <td>€2</td>
+      <td>€2</td>
+      <td style="color: #ee6c4dff">€?</td>
+    </tr>
+  </tbody>
+</table>
+
+If we look at this table we can see a pattern: for every total price increase of €2 for Xavier and €1 euro for Yenifer, the price of an apple increases by €1, whereas the price of a banana stays the same! This means that we can find the price of an competitor 4 from this pattern: we have the same increase, so the apple price will be €4 and the banana price €2.
+
+Learning a pattern is something that computers are, like humans, good at as well. This learning of patterns from data by a computer is often called machine learning. By using this pattern our calculations become a lot faster. Similarly, we can use machine learning (pattern) finding to make the calculations for the camera images a lot faster as well!
+
+<Todo>maybe let the NN run in the browser</Todo>
