@@ -11,17 +11,21 @@ import DrawPoloidalCamera from "../../components/blog/machine-learning-reconstru
 
 The temperature in the core of a nuclear fusion reactor can be very hot, around 150 million degrees celsius! In the process of burning the fuel, we do not only generate heat, but also ashes. Ideally, these ashes are removed because they dilute the fuel in the reactor. However, we need to be careful, because if we allow to much heat and ashes to flow to the wall, the wall might melt. In other words: we need to control the heat in the reactor.
 
-But for good control we also need measurements. For example, a self-driving car will never be able to self drive if it can't sense the environment. The car needs cameras to know what is happening in the outside world. In the same way, wee have cameras looking inside the reactor to know what is happening. The problem however is that these cameras do not exactly measure what we want to know: they are measuring a _projection_. This is illustrated in the following figure:
+But for good control we also need measurements. For example, a self-driving car will never be able to self drive if it can't sense the environment. The car needs cameras to know what is happening in the outside world. In the same way, wee have cameras looking inside the reactor to know what is happening. The problem however is that these cameras do not exactly measure what we want to know: they are measuring a _projection_. Two examples of projections can be seen in the images below. The dark blue block and line have light blue 'shadows', and these shadows are the projections of the block/line.
 
-<Todo>Add figure with projections</Todo>
+<div class="flex flex-col md:flex-row">
+<img class="object-contain md:w-1/2 w-full" src="/blogdata/machine-learning-reconstruction/projection-1.svg" />
+<img class="object-contain md:w-1/2 w-full" src="/blogdata/machine-learning-reconstruction/projection-2.svg" />
+</div>
+
 
 ## Understanding Projections in a Fusion Reactor
 
-In our case of a nuclear fusion reactor, we have a cross-section that 'turns around' as can be seen in the examples below.
+In our case of a nuclear fusion reactor we have a cross-section that is projected onto a camera image. Because this fusion reactor is donut shaped,we have a cross-section that 'turns around'. So, in the examples below we see a cross-section, and the camera image, where the cross-section is turned around the centre.
 
 <Todo>Add mantis example</Todo>
 
-On the right we can see an image that would represent what it would look like in a fusion reactor, and on the left we can see the corresponding cross-section. To even get more insight into how the camera images are created from the cross-sections, the following interactive example allows you to draw an emissivity profile in the cross-section, and the camera image is automatically calculated from that. I encourage to play around with how the location of the emissivity influences the camera image.
+On the right we can see an image that would represent what it would look like in a fusion reactor, and on the left we can see the corresponding cross-section. To even get more insight into how the camera images are created from the cross-sections, the following interactive example allows you to draw an emissivity profile in the cross-section, and the camera image is automatically calculated from that. I encourage to play around with how the location of the emissivity influences the camera image. And really try to understand how the cross-section turns around to make a camera image! You can draw by clicking and dragging with your mouse.
 
 <DrawPoloidalCamera client:load />
 
