@@ -116,7 +116,7 @@ const InterActiveCanvas = forwardRef((props: Props, ref) => {
     <>
       <div className="flex flex-col">
         <div>
-          <button onClick={clear} className="bg-[#E83727] px-2 py-1 my-2 rounded-md text-white">
+          <button onClick={clear} className="bg-[#E53840] px-2 py-1 my-2 rounded-md text-white">
             Clear Drawing
           </button>
         </div>
