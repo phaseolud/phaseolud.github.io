@@ -99,7 +99,7 @@ const InterActiveCanvas = forwardRef((props: Props, ref) => {
     const ctx = canvas.getContext("2d");
     ctx.scale(scaleFactor, scaleFactor);
     ctx.lineCap = "round";
-    ctx.strokeStyle = "#E83727";
+    ctx.strokeStyle = "#E53840";
     ctx.lineWidth = 2;
     ctxRef.current = ctx;
     ctx.font = "80px sans-serif";

@@ -1,6 +1,8 @@
 import * as math from "mathjs";
 import React, { useEffect, useRef, useState } from "react";
 import tokamakRenderImage from "./masked_rendered_view_highres.png";
+import { colorMap } from './colorMap.js';
+
 type Props = {
   flatCameraImage;
 };
@@ -28,8 +30,8 @@ const CameraImageCanvas = ({ flatCameraImage: flatCameraImage }: Props) => {
   useEffect(() => {
     let colourImageData = new Uint8ClampedArray(258 * 193 * 4);
     const maxFlatCameraImage = math.max(flatCameraImage);
-    const brightnessScaling = 370.0 / maxFlatCameraImage;
-    const normalizedColour = [1, 39 / 232, 57 / 232];
+    const brightnessScaling = 380.0 / maxFlatCameraImage;
+    const normalizedColour = [1, 56 / 229, 64 / 229];
     for (let i = 0; i < colourImageData.length; i += 4) {
       colourImageData[i + 0] = brightnessScaling * flatCameraImage[i / 4]; // R value
       colourImageData[i + 1] = normalizedColour[1] * brightnessScaling * flatCameraImage[i / 4]; // G value
