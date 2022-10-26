@@ -99,7 +99,7 @@ const InterActiveCanvas = forwardRef((props: Props, ref) => {
     const ctx = canvas.getContext("2d");
     ctx.scale(scaleFactor, scaleFactor);
     ctx.lineCap = "round";
-    ctx.strokeStyle = "#ee6c4dff";
+    ctx.strokeStyle = "#E83727";
     ctx.lineWidth = 2;
     ctxRef.current = ctx;
     ctx.font = "80px sans-serif";
@@ -116,7 +116,7 @@ const InterActiveCanvas = forwardRef((props: Props, ref) => {
     <>
       <div className="flex flex-col">
         <div>
-          <button onClick={clear} className="bg-[#ee6c4dff] px-2 py-1 my-2 rounded-md text-white">
+          <button onClick={clear} className="bg-[#E83727] px-2 py-1 my-2 rounded-md text-white">
             Clear Drawing
           </button>
         </div>
