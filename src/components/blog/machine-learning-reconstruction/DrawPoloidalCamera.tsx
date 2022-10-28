@@ -27,7 +27,7 @@ const DrawPoloidalCamera = () => {
   const [rectToPolMap, setRectToPolMap] = useState<Map<number, number>>(null);
   const [flatCameraImage, setFlatCameraImage] = useState<Array<number>>(Array(49794).fill(0));
 
-  const dataLoaded = geometryMatrix && rectToPolMap
+  const dataLoaded = geometryMatrix && rectToPolMap;
 
   useEffect(() => {
     loadGeometryMatrix().then((data) => setGeometryMatrix(data));
@@ -68,11 +68,9 @@ const DrawPoloidalCamera = () => {
         </div>
         <div>
           <p className="text-sm italic">
-            The left canvas can be used to draw a 'plasma profile' on with your mouse. It represents the
-            cross-section of the tokamak. The right canvas shows what it would that drawing look like in a
-            tokamak. A large portion of the right image is black because of the camera hole in the tokamak
-            wall. This version is more pixelated than the real one, to allow for fast performance in your
-            browser.
+            The left canvas can be used to draw light on the cross-section with your mouse. It represents the
+            cross-section of the reactor. The right image shows what the camera sees. This version is more
+            pixelated than the real one, to allow for fast performance in your browser.
           </p>
         </div>
       </div>
