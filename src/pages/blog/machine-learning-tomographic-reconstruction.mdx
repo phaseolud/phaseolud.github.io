@@ -9,9 +9,11 @@ import InfoBlock from "../../components/InfoBlock.astro";
 import Todo from "../../components/Todo.astro";
 import DrawPoloidalCamera from "../../components/blog/machine-learning-reconstruction/DrawPoloidalCamera.tsx";
 
+_This target audience of this blogpost is anyone who is interested in the use of camera images in fusion reactors. The post consists of a general introduction, including an interactive example to better understand the challenges and the problem. Next, an example that is much simpler, but captures the essence, is presented; I encourage you to grab a pen and paper and work along. We use high school mathematics in this post, but even without I would recommend trying to read it. If you are already in fusion but would like to understand the camera system in TCV fast, I would start from [here](#interactiveExample)._
+
 Electricity is very important in our society. Ideally, all the energy comes from sustainable sources, but that is unfortunately not yet the case. One potential future sustainable energy source is nuclear fusion, but there are still some challenges to solve before it can be used effectively.
 
-The temperature in a nuclear fusion reactor can be very hot, around 150 million degrees celsius, ten times hotter than the sun. To generate the heat and energy, we burn a fuel. In this process of burning fuel, ashes are also created. These ashes must be removed because they do not burn that well. However, we need to be careful when removing the ashes, because some heat can go with the ashes. The walls of the reactor can not handle a heat that is too high. Therefore, we need to actively control the amount of heat that reaches the wall.
+The temperature in a nuclear fusion reactor can be very hot, around 150 million degrees Celsius, ten times hotter than the sun. To generate the heat and energy, we burn a fuel. In this process of burning fuel, ashes are also created. These ashes must be removed because they do not burn that well. However, we need to be careful when removing the ashes, because some heat can go with the ashes. The walls of the reactor can not handle a heat that is too high. Therefore, we need to actively control the amount of heat that reaches the wall.
 
 But for good control we also need measurements. For example, a thermostat can not keep the room at 18 °C, if it does not know what the temperature is in the room. Another example: a self-driving car will never be able to drive safely if it cannot see the environment. The car needs cameras to know what is happening in the outside world. In the same way, we have cameras looking inside the reactor to know what is happening. However, a challenge is that the camera do not exactly measure what we want to know; they are measuring a _projection_. Two examples of projections can be seen in the images below. The dark blue block and line have light blue 'shadows', and these shadows are the projections of the block/line.
 
@@ -28,7 +30,7 @@ But for good control we also need measurements. For example, a thermostat can no
 
 ## Understanding Projections in a Fusion Reactor
 
-The fusion reactor we use is doughnut shaped. An image of the reactor is shown below on the left. The image below shows a drawing of the fusion reactor with on the inside in blue/yellow being the burning fuel. The black box in the left image indicates where the camera looks. On the right we can see what the camera sees. The blue light turns around the center inside the reactor.
+The fusion reactor we use is doughnut shaped. The image below shows a drawing of the fusion reactor on the left, with on the inside the blue/yellow being the burning fuel. The black box in the left image indicates where the camera looks. On the right we can see what the camera sees. The blue light turns around the centre inside the reactor.
 
 <div class="flex flex-col md:flex-row">
   <img class="object-contain w-full" src="/blogdata/machine-learning-reconstruction/drawing_test1.svg" />
@@ -38,7 +40,7 @@ The fusion reactor we use is doughnut shaped. An image of the reactor is shown b
   https://www.deepmind.com/blog/accelerating-fusion-science-through-learned-plasma-control
 </p>
 We will now look at another example, but now we look directly at the cross-section, and not at the whole
-reactor anymore. The image below on the left shows an example cross-section emitting light. The image on the
+reactor any more. The image below on the left shows an example cross-section emitting light. The image on the
 right shows us again what that would look like with the camera.
 
 <div class="flex flex-row justify-between items-start content-start max-w-full">
@@ -52,7 +54,15 @@ right shows us again what that would look like with the camera.
   />
 </div>
 
-To even get more insight into how the camera images are created from the cross-sections, the following interactive example allows you to draw light in the cross-section, and the camera image is automatically calculated from that. I encourage you to play around and find out how the location of the light in the cross-section influences the camera image. Try to understand how the cross-section turns around to make a camera image! You can draw by clicking and dragging with your mouse. Lines drawn in the bottom left region are most visible in the camera image, because the camera is directly looking at this light. However, if you draw lines in the upper half or more on the right, you can see that it is much more difficult to see the original shape.
+<div id="interactiveExample"></div>
+To even get more insight into how the camera images are created from the cross-sections, the following
+interactive example allows you to draw light in the cross-section, and the camera image is automatically
+calculated from that. I encourage you to play around and find out how the location of the light in the
+cross-section influences the camera image. Try to understand how the cross-section turns around to make a
+camera image! You can draw by clicking and dragging with your mouse. Lines drawn in the bottom left region are
+most visible in the camera image, because the camera is directly looking at this light. However, if you draw
+lines in the upper half or more on the right, you can see that it is much more difficult to see the original
+shape.
 
 <DrawPoloidalCamera client:load />
 
@@ -76,7 +86,7 @@ Calculating the total price for both Xavier and Yenifer is pretty straightforwar
 | Xavier   | 2 $\cdot$ €0.50 = €1    | 3 $\cdot$ €1 = €3 | €3         |
 | Yenifer  | 1 $\cdot$ €0.50 = €0.50 | 2 $\cdot$ €1 = €2 | €2.50      |
 
-Okay, bad news! You just found out that there is a new competitor on the market, who is also selling apples and bananas. And you have seen that both your loyal customers Xavier and Yenifer are also going to the new competitor. You would like to know for which price she sells her apples and bananas, but asking is not really possible. However, you can find out how much Xavier and Yenifer pay in total using your binoculars. You saw that Xavier payed €8 and Yenifer payed €5. Fortunately, both Xavier and Yenifer **always** buy the same amounts of apples and bananas. We will try to calculate the prices of this new competitor from the given information. To get started we use the following symbols as abbreviations; and make the text look a bit less mathematical:
+Okay, bad news! You just found out that there is a new competitor on the market, who is also selling apples and bananas. And you have seen that both your loyal customers Xavier and Yenifer are also going to the new competitor. You would like to know for which price she sells her apples and bananas, but asking is not really possible. However, you can find out how much Xavier and Yenifer pay in total using your binoculars. You saw that Xavier paid €8 and Yenifer paid €5. Fortunately, both Xavier and Yenifer **always** buy the same amounts of apples and bananas. We will try to calculate the prices of this new competitor from the given information. To get started we use the following symbols as abbreviations; and make the text look a bit less mathematical:
 
 | Symbol | Meaning                  |
 | ------ | ------------------------ |
@@ -92,19 +102,20 @@ $$
 \end{align*}
 $$
 
-Finding the price of the apples and bananas is a bit difficult. What we can do to get started is taking a look at Yenifer. We can express hte price of an apple in terms of bananas for her:
+Finding the price of the apples and bananas is a bit difficult. What we can do to get started is taking a look at Yenifer. We can express the price of an apple in terms of bananas for her:
 
 $$
 \begin{gather*}
   1 \cdot🍎+ 2 \cdot🍌= €5 &\text{(Yenifer)} \\
-  \implies🍎 =  €5 - 2 \cdot🍌\end{gather*}
+  \implies🍎 =  €5 - 2 \cdot🍌
+\end{gather*}
 $$
 
 Okay, so we know that the price of an apple is the total price for Yenifer (€5) minus 2 times the price of a banana. But now we know the price of an apple in terms of bananas. So, we can plug this into the price calculation of Xavier:
 
 $$
 \begin{align*}
- 2 \cdot \overbrace{€5 - 2 \cdot🍌^🍎\  \text{from Yenifer}} + 3 \cdot🍌&= €8 &\text{(Xavier)} \\
+ 2 \cdot \overbrace{€5 - 2 \cdot🍌}^{🍎\  \text{from Yenifer}} + 3 \cdot🍌&= €8 &\text{(Xavier)} \\
  = €10 - 4 \cdot🍌+ 3 \cdot🍌&= €8
 \end{align*}
 $$
@@ -132,12 +143,12 @@ Phew, that was some work, but now we know that the prices of our competitor are 
 
 ## Machine Learning for Faster Calculations
 
-The next weeks you are at the market again, but now there are even more competitors. Because you can now calculate their prices by knowing their total price, you have written all the total prices Xavier and Yenifer payed for each competitor. We abbreviate total price as TP and competitor as C.:
+The next weeks you are at the market again, but now there are even more competitors. Because you can now calculate their prices by knowing their total price, you have written all the total prices Xavier and Yenifer paid for each competitor. We abbreviate total price as TP and competitor as C.:
 
 | Customer | TP C.1 | TP C.2 | TP C.3 | TP C.4 |
-| -------- | ------- | ------- | ------- | ------- |
-| Xavier   | €8      | €10     | €12     | €14     |
-| Yenifer  | €5      | €6      | €7      | €8      |
+| -------- | ------ | ------ | ------ | ------ |
+| Xavier   | €8     | €10    | €12    | €14    |
+| Yenifer  | €5     | €6     | €7     | €8     |
 
 It would be quite some work to find all their sell prices (and those of future competitors), maybe we can find some structure in answers. We ask our neighbour who really likes doing calculations to work out the prices of the different competitors, but he only has time for competitor 2 and 3 (1 we already did ourselves). We write it again down in a table with Xavier and Yenifer abbreviated as X and Y:
 
@@ -241,6 +252,6 @@ It would be quite some work to find all their sell prices (and those of future c
 
 If we look at this table we can see a pattern: for every total price increase of €2 for Xavier and €1 euro for Yenifer, the price of an apple increases by €1, whereas the price of a banana stays the same. This means we can find the prices of competitor 4 from this pattern: using this found pattern we find that the apple costs €4 and the banana €2.
 
-Finding a pattern is something that computers, just like humans, are good at. The learning of patterns from data by a computer is often called machine learning. By using patterns, calculations can become much faster. This can also be applied to speed up the calculations for the camera inside a fusion reactor, which contributes to a safer and more performant reactor, and hopefully in the end a sustainable source of energy.
+Finding a pattern is something that computers, just like humans, are good at. The learning of patterns from data by a computer is often called machine learning. By using patterns, calculations can become much faster. This can also be applied to the original problem: speeding up the calculations for the camera inside a fusion reactor, which contributes to a safer and more performant reactor, and hopefully in the end a sustainable source of energy.
 
 <Todo>maybe let the NN run in the browser</Todo>
