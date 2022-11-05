@@ -3,13 +3,17 @@ title: "Faster Calculations for Nuclear Fusion with Machine Learning"
 description: "In this blog post we discuss what tomographic inversions are, and in what fields we might find them. Solving inverse problems is difficult, so we work through examples, and use an interactive tool to visualize the inversion problem."
 pubDate: "19 Oct 2022"
 layout: "../../layouts/BlogPost.astro"
+author: "Loek van Leeuwen"
 ---
 
 import InfoBlock from "../../components/InfoBlock.astro";
 import Todo from "../../components/Todo.astro";
+import CollapsableExample from "../../components/CollapsableExample.tsx";
 import DrawPoloidalCamera from "../../components/blog/machine-learning-reconstruction/DrawPoloidalCamera.tsx";
 
-_This target audience of this blogpost is anyone who is interested in the use of camera images in fusion reactors. The post consists of a general introduction, including an interactive example to better understand the challenges and the problem. Next, an example that is much simpler, but captures the essence, is presented; I encourage you to grab a pen and paper and work along. We use high school mathematics in this post, but even if unsure about your mathematics I recommend trying to read it._
+_This blogpost is the realization of my science communication product, a deliverable for the master Science and Technology of Nuclear fusion at the Eindhoven University of Technology. The goal of this blogpost is to introduce why we need divertor imaging and let the reader understand the geometry by using an [interactive example](#interactiveExample)._
+
+<hr />
 
 Electricity is very important in our society. Ideally, all the energy comes from sustainable sources, but that is unfortunately not yet the case. One potential future sustainable energy source is nuclear fusion, but there are still some challenges to solve before it can be used effectively.
 
@@ -35,10 +39,8 @@ The fusion reactor we use is doughnut shaped. The image below shows a drawing of
 <div class="flex flex-col md:flex-row">
   <img class="object-contain w-full" src="/blogdata/machine-learning-reconstruction/drawing_test1.svg" />
 </div>
-<p class="text-xs text-left mt-0">
-  The left image is adapted from
-  https://www.deepmind.com/blog/accelerating-fusion-science-through-learned-plasma-control
-</p>
+<p class="text-xs text-left mt-0">The left image is adapted from https://www.deepmind.com/blog/accelerating-fusion-science-through-learned-plasma-control</p>
+
 We will now look at another example, but now we look directly at the cross-section, and not at the whole
 reactor any more. The image below on the left shows an example cross-section emitting light. The image on the
 right shows us again what that would look like with the camera.
@@ -53,9 +55,17 @@ right shows us again what that would look like with the camera.
     src="/blogdata/machine-learning-reconstruction/example_camera_image.png"
   />
 </div>
+The camera image on the right shows the cross-section on the left, but turned around the centre. To really understand the symmetry in the reactor, and the turning around, the following video shows how a cross-section similar to the one above transforms into a camera image.
+
+<div class="w-full h-auto max-w-xs flex justify-center mx-auto">
+<video width="960" height="1282" controls>
+<source src="/blogdata/machine-learning-reconstruction/draw_cam_img_incr.mp4" type="video/mp4" />
+It appears that your browser doesn't support this video.
+</video>
+</div>
 
 <div id="interactiveExample"></div>
-To even get more insight into how the camera images are created from the cross-sections, the following
+To get even more insight into how the camera images are created from the cross-sections, the following
 interactive example allows you to draw light in the cross-section, and the camera image is automatically
 calculated from that. I encourage you to play around and find out how the location of the light in the
 cross-section influences the camera image. Try to understand how the cross-section turns around to make a
@@ -66,10 +76,9 @@ shape.
 
 <DrawPoloidalCamera client:load />
 
-As we can see, the calculation of the camera image given the cross-section happens quickly. However, transforming the camera image back to a cross-section is difficult and pretty slow. In this blog post we will find out why it is difficult and slow, and gain insight how we can speed them up with machine learning.
+As we can see, the calculation of the camera image given the cross-section happens quickly. However, transforming the camera image back to a cross-section is difficult and pretty slow. The exact reason is outside the scope of this blogpost. However, if you are interested, the example below shows why this is the case for a much smaller problem.
 
-## From Camera Images in a Reactor to Buying Fruit, and Back
-
+<CollapsableExample client:load title="From Camera Images in a Reactor to Buying Fruit, and Back">
 To understand why calculating the cross-section given a camera image is slow, we will tackle a much smaller and comprehensible problem, but with the same essence!
 
 Let's take the scenario that you are selling fruit and vegetables at the farmer's market and that the price of an apple is €0.50 and the price of a banana €1. Two customers arrive, and they order the following:
@@ -238,14 +247,14 @@ It would be quite some work to find all their sell prices (and those of future c
       <td>€1</td>
       <td>€2</td>
       <td>€3</td>
-      <td style="color: #ee6c4dff;">€?</td>
+      <td class="text-red-700">€?</td>
     </tr>
     <tr>
       <td>Price Banana</td>
       <td>€2</td>
       <td>€2</td>
       <td>€2</td>
-      <td style="color: #ee6c4dff">€?</td>
+      <td class="text-red-700">€?</td>
     </tr>
   </tbody>
 </table>
@@ -254,4 +263,4 @@ If we look at this table we can see a pattern: for every total price increase of
 
 Finding a pattern is something that computers, just like humans, are good at. The learning of patterns from data by a computer is often called machine learning. By using patterns, calculations can become much faster. This can also be applied to the original problem: speeding up the calculations for the camera inside a fusion reactor, which contributes to a safer and more performant reactor, and hopefully in the end a sustainable source of energy.
 
-<Todo>maybe let the NN run in the browser</Todo>
+</CollapsableExample>

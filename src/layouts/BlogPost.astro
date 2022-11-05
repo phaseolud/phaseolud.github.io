@@ -10,30 +10,24 @@ export interface Props {
     pubDate?: string;
     updatedDate?: string;
     heroImage?: string;
+    author?: string;
   };
 }
 
 const {
-  content: { title, description, pubDate, updatedDate, heroImage },
+  content: { title, description, pubDate, updatedDate, heroImage, author },
 } = Astro.props;
 ---
 
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" />
 
     <style>
-      .title {
-        font-size: 2em;
-        margin: 0.25em 0 0;
-      }
       hr {
         border-top: 1px solid #ddd;
-        margin: 1rem 0;
+        margin: 0;
       }
     </style>
   </head>
@@ -43,8 +37,11 @@ const {
     <main>
       <article>
         {heroImage && <img width={720} height={360} src={heroImage} alt="" />}
-        <h1 class="title">{title}</h1>
-        {pubDate && <time>{pubDate}</time>}
+        <h1 class="text-3xl mb-2">{title}</h1>
+        <div class="flex justify-between text-gray-700 text-sm italic">
+          <div>{author && `Written by: ${author}`}</div>
+          <div>{pubDate && <time>{pubDate}</time>}</div>
+        </div>
         {
           updatedDate && (
             <div>
