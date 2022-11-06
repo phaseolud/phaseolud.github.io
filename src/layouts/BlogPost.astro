@@ -37,7 +37,7 @@ const {
     <main>
       <article>
         {heroImage && <img width={720} height={360} src={heroImage} alt="" />}
-        <h1 class="text-3xl mb-2">{title}</h1>
+        <h1 class="text-3xl mb-4 text-left">{title}</h1>
         <div class="flex justify-between text-gray-700 text-sm italic">
           <div>{author && `Written by: ${author}`}</div>
           <div>{pubDate && <time>{pubDate}</time>}</div>

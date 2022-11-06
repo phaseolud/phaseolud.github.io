@@ -22,7 +22,7 @@ const CameraImageCanvas = ({ flatCameraImage: flatCameraImage }: Props) => {
     canvas.style.width = `${height * aspectRatio}px`;
     canvas.style.height = `${height}px`;
     canvas.style.background =
-      "url('/blogdata/machine-learning-reconstruction/masked_rendered_view_highres.png')";
+      "url('/blogdata/camera-images-fusion-reactor/masked_rendered_view_highres.png')";
     canvas.style.backgroundSize = "100% 100%";
     const ctx = canvas.getContext("2d");
     ctxRef.current = ctx;

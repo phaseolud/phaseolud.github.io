@@ -5,14 +5,14 @@ import { create, all, Matrix } from "mathjs";
 const math = create(all);
 
 async function loadGeometryMatrix(): Promise<Matrix> {
-  const response = await fetch("/blogdata/machine-learning-reconstruction/mathjs_gm.json");
+  const response = await fetch("/blogdata/camera-images-fusion-reactor/mathjs_gm.json");
   const data = await response.json();
   // @ts-ignore
   return math.SparseMatrix.fromJSON(data);
 }
 
 async function loadRectToPoloidalGridMap(): Promise<Map<number, number>> {
-  const response = await fetch("/blogdata/machine-learning-reconstruction/jsrect_to_pol.json");
+  const response = await fetch("/blogdata/camera-images-fusion-reactor/jsrect_to_pol.json");
   const data = await response.json();
   const dataMap = new Map(
     Object.entries(data).map(([rectIndex, PolIndex]) => [parseInt(rectIndex), PolIndex])
